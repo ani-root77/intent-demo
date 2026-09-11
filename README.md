@@ -25,7 +25,7 @@ If Node is missing or too old, install the LTS release from [nodejs.org](https:/
 ### 2. Clone and install
 
 ```bash
-git clone https://github.com/Ani-ml-droid/intent-demo.git
+git clone https://github.com/ani-root77/intent-demo.git
 cd intent-demo
 npm install
 ```
