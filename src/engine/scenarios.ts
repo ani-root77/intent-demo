@@ -1,5 +1,5 @@
 // Demo scenarios. The "AI agent" is MOCKED: its proposals are scripted here to stand in
-// for any third-party agent. INTENT's side (checks, twin, decision) is computed live.
+// for any third-party agent. Clario's side (checks, twin, decision) is computed live.
 
 import { buildFeedback, verify, type Decision, type Proposal, type Verification } from './guard'
 import { usd, type Investor, type Policy } from './model'
@@ -38,7 +38,7 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
     id: 'drift',
     label: 'Intent drift',
     title: 'Scenario 1 · Intent drift',
-    tagline: 'A valid-looking trade that quietly breaks the plan. INTENT sends it back and the agent fixes it.',
+    tagline: 'A valid-looking trade that quietly breaks the plan. Clario sends it back and the agent fixes it.',
     intent: { kind: 'request', text: 'Increase my AI exposure.' },
     objective: 'increase_ai_exposure',
     proposals: [
@@ -47,7 +47,7 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
         ...fromInvestor,
         action: 'BUY',
         summary: 'Buy $15,000 of Diversified AI Innovation ETF (AIIX)',
-        rationale: 'Revised after INTENT feedback. Replaced the single stock with a diversified AI basket of about 120 holdings, sized within the $15,000 single-position and $25,000 deployable-cash limits. Cash stays above $20,000.',
+        rationale: 'Revised after Clario feedback. Replaced the single stock with a diversified AI basket of about 120 holdings, sized within the $15,000 single-position and $25,000 deployable-cash limits. Cash stays above $20,000.',
         trades: [
           { asset: 'aiix', amount: 15_000 },
           { asset: 'cash', amount: -15_000 },
@@ -60,7 +60,7 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
     id: 'protect',
     label: 'Protect (attack)',
     title: 'Scenario 2 · Protect',
-    tagline: 'Untrusted content pushes the agent into an extreme move. INTENT blocks it before anything happens.',
+    tagline: 'Untrusted content pushes the agent into an extreme move. Clario blocks it before anything happens.',
     intent: { kind: 'mandate', text: 'Standing mandate: grow my portfolio toward retiring at 55. Keep it moderate-risk.' },
     objective: 'long_term_growth_moderate',
     injected: {
@@ -90,7 +90,7 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
     id: 'stubborn',
     label: 'Agent keeps failing',
     title: 'Scenario 3 · The agent keeps failing',
-    tagline: 'The agent keeps coming back with the same idea. INTENT caps the retries and hands it to a human instead of approving.',
+    tagline: 'The agent keeps coming back with the same idea. Clario caps the retries and hands it to a human instead of approving.',
     intent: { kind: 'request', text: 'Increase my AI exposure.' },
     objective: 'increase_ai_exposure',
     proposals: [
@@ -159,7 +159,7 @@ export function buildFlow(scenario: Scenario, investor: Investor, policy: Policy
     verifications.push(v)
     steps.push({ kind: 'propose', i }, { kind: 'verify', i })
     if (v.decision === 'REVISE') {
-      feedback[i] = buildFeedback(v, policy)
+      feedback[i] = buildFeedback(v, policy, investor)
       steps.push({ kind: 'feedback', i })
       continue
     }

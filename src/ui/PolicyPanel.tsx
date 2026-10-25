@@ -2,7 +2,9 @@ import { Lock, RotateCcw } from 'lucide-react'
 import { ASSETS, ASSET_ORDER, total, usd, usdShort, type Investor, type Policy } from '../engine/model'
 import { Card, SectionTitle } from './theme'
 
-const FIELDS: { key: keyof Policy; label: string; unit: '%' | '$' | 'pts' | 'x'; step: number; min: number; max: number }[] = [
+type NumKey = { [K in keyof Policy]: Policy[K] extends number ? K : never }[keyof Policy]
+
+const FIELDS: { key: NumKey; label: string; unit: '%' | '$' | 'pts' | 'x'; step: number; min: number; max: number }[] = [
   { key: 'maxSingleStockPct', label: 'Max single stock', unit: '%', step: 1, min: 1, max: 100 },
   { key: 'maxSectorPct', label: 'Max sector (tech)', unit: '%', step: 1, min: 5, max: 100 },
   { key: 'minCash', label: 'Min cash buffer', unit: '$', step: 5000, min: 0, max: 100000 },

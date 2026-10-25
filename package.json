@@ -10,10 +10,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "start": "tsx server/index.ts",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:functions": "esbuild server/firebase.ts --bundle --platform=node --format=esm --target=node22 --outfile=functions/index.js --external:firebase-functions --external:firebase-admin",
+    "deploy": "npm run build && npm run build:functions && firebase deploy --only hosting,functions"
   },
   "dependencies": {
+    "compromise": "14.17.0",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.44.0",
     "react": "^19.2.8",
@@ -26,8 +30,10 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "esbuild": "^0.28.2",
     "oxlint": "^1.81.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
   }

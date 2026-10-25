@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets
+.env
+
+# Playground workspace (profiles, settings)
+data/
+
+# Firebase
+functions/node_modules
+functions/index.js
+.firebase/
+firebase-debug.log

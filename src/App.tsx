@@ -1,9 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Plug } from 'lucide-react'
+import { ArrowLeft, Plug } from 'lucide-react'
 import { DEFAULT_POLICY, MAYA, type Policy } from './engine/model'
 import { buildFlow, SCENARIOS, SCENARIO_ORDER, type ScenarioId } from './engine/scenarios'
 import { AuditTrail } from './ui/AuditTrail'
 import { Feed, type Resolution } from './ui/Feed'
+import { Playground } from './playground/Playground'
+import { useWorkspace } from './playground/useWorkspace'
+import { isTeam } from './api'
+import { Login } from './portal/Login'
+import { Portal } from './portal/Portal'
 import { HowItWorks } from './ui/HowItWorks'
 import { LoopDiagram } from './ui/LoopDiagram'
 import { PolicyPanel } from './ui/PolicyPanel'
@@ -14,7 +19,26 @@ import { Card } from './ui/theme'
 const AGENTS = ['Nova Advisor Agent · Vendor A', 'BrokerPilot · Vendor B', 'In-house Research Agent']
 
 export default function App() {
-  const [view, setView] = useState<'demo' | 'how'>('demo')
+  const [view, setView] = useState<'portal' | 'playground' | 'demo' | 'how'>('portal')
+  const { ws, update, updateLocal, replace, state } = useWorkspace()
+  const [profileId, setProfileId] = useState('')
+  const [signedIn, setSignedIn] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem('intent-signed-in')
+    } catch {
+      return null
+    }
+  })
+  const signIn = (id: string | null) => {
+    setSignedIn(id)
+    if (id) setProfileId(id)
+    try {
+      if (id) localStorage.setItem('intent-signed-in', id)
+      else localStorage.removeItem('intent-signed-in')
+    } catch {
+      /* ignore */
+    }
+  }
   const [scenarioId, setScenarioId] = useState<ScenarioId>('drift')
   const [rawIndex, setIndex] = useState(0)
   const [policy, setPolicy] = useState<Policy>(DEFAULT_POLICY)
@@ -74,6 +98,13 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey)
   }, [view, lastStep])
 
+  // The Clario lab is for the team only; everyone else only ever sees the portal.
+  const team = isTeam()
+  if (view === 'portal' || !team) {
+    if (!signedIn || !ws.profiles.some((p) => p.id === signedIn)) return <Login ws={ws} onLogin={signIn} />
+    return <Portal ws={ws} update={updateLocal} profileId={profileId || signedIn} onProfile={signIn} onOpenLab={team ? () => setView('playground') : undefined} onLogout={() => signIn(null)} />
+  }
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 border-b border-slate-800 bg-slate-950 text-white">
@@ -81,14 +112,18 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <img src="/favicon.svg" alt="" className="h-8 w-8" />
             <div>
-              <div className="text-lg font-extrabold leading-none tracking-[0.22em]">INTENT</div>
+              <div className="text-lg font-extrabold leading-none tracking-[0.22em]">CLARIO</div>
               <div className="mt-0.5 text-[11px] text-slate-400">Trust layer for autonomous investing</div>
             </div>
           </div>
+          <button onClick={() => setView('portal')} className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-white/10">
+            <ArrowLeft size={13} /> Back to portal
+          </button>
           <nav className="flex rounded-lg bg-white/5 p-1 text-sm">
             {(
               [
-                ['demo', 'Live demo'],
+                ['playground', 'Playground'],
+                ['demo', 'Guided demo'],
                 ['how', 'How it works'],
               ] as const
             ).map(([id, label]) => (
@@ -97,7 +132,7 @@ export default function App() {
               </button>
             ))}
           </nav>
-          <div className="ml-auto flex items-center gap-2 text-xs">
+          <div className={`ml-auto items-center gap-2 text-xs ${view === 'demo' ? 'flex' : 'hidden'}`}>
             <Plug size={14} className="text-indigo-300" />
             <span className="text-slate-400">Connected agent</span>
             <select value={agent} onChange={(e) => setAgent(e.target.value)} className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-xs font-semibold text-white">
@@ -106,11 +141,13 @@ export default function App() {
               ))}
             </select>
           </div>
-          <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold text-amber-300">Concept demo · mocked agent · simulated data</span>
+          <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold text-amber-300">{view === 'playground' ? 'Proof of concept · simulated portfolios · no trades executed' : 'Concept demo · mocked agent · simulated data'}</span>
         </div>
       </header>
 
-      {view === 'demo' ? (
+      {view === 'playground' ? (
+        <Playground ws={ws} update={update} replace={replace} state={state} profileId={profileId} setProfileId={setProfileId} />
+      ) : view === 'demo' ? (
         <main className="mx-auto max-w-[1680px] space-y-4 p-4">
           <ScenarioBar scenarioId={scenarioId} onScenario={goScenario} flow={flow} index={index} onIndex={goIndex} playing={playing} onPlay={setPlaying} />
 

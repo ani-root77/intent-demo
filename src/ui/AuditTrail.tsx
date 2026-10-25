@@ -14,7 +14,7 @@ function fnv1a(s: string) {
 
 const ACTOR_STYLE: Record<string, string> = {
   Investor: 'bg-slate-800 text-white',
-  INTENT: 'bg-emerald-600 text-white',
+  Clario: 'bg-emerald-600 text-white',
   Agent: 'bg-indigo-600 text-white',
   Untrusted: 'bg-rose-600 text-white',
 }
@@ -27,7 +27,7 @@ export function AuditTrail({ flow, index, agent, resolution }: { flow: Flow; ind
         rows.push({ actor: 'Investor', text: `Intent received: “${flow.scenario.intent.text}”` })
         break
       case 'parse':
-        rows.push({ actor: 'INTENT', text: 'Intent locked as structured policy: objective + 5 hard constraints (agent: read-only)' })
+        rows.push({ actor: 'Clario', text: 'Intent locked as structured policy: objective + 5 hard constraints (agent: read-only)' })
         break
       case 'context':
         rows.push({ actor: 'Untrusted', text: `External content entered agent context: ${flow.scenario.injected?.source}` })
@@ -38,15 +38,15 @@ export function AuditTrail({ flow, index, agent, resolution }: { flow: Flow; ind
       case 'verify': {
         const v = flow.verifications[s.i]
         const fails = v.checks.filter((c) => c.status === 'fail').length
-        rows.push({ actor: 'INTENT', text: `Verified v${s.i + 1}: 8 checks, ${fails} failed. Goal likelihood ${v.twinBefore.successPct.toFixed(0)}% → ${v.twinAfter.successPct.toFixed(0)}%`, tag: v.decision })
+        rows.push({ actor: 'Clario', text: `Verified v${s.i + 1}: 8 checks, ${fails} failed. Goal likelihood ${v.twinBefore.successPct.toFixed(0)}% → ${v.twinAfter.successPct.toFixed(0)}%`, tag: v.decision })
         break
       }
       case 'feedback':
-        rows.push({ actor: 'INTENT', text: `Structured feedback sent to agent (${flow.feedback[s.i].violations.length} violations, 5 limits). No investment suggested` })
+        rows.push({ actor: 'Clario', text: `Structured feedback sent to agent (${flow.feedback[s.i].violations.length} violations, ${Object.keys(flow.feedback[s.i].constraints_for_revision).length} limits). No investment suggested` })
         break
       case 'outcome':
         rows.push({
-          actor: 'INTENT',
+          actor: 'Clario',
           text: flow.final === 'ALLOW' ? 'Passed proposal released to the investor for approval' : flow.final === 'BLOCK' ? 'Action blocked before execution. Portfolio unchanged' : 'Revision cap reached. Escalated to the advisor queue',
           tag: flow.final,
         })
@@ -55,8 +55,8 @@ export function AuditTrail({ flow, index, agent, resolution }: { flow: Flow; ind
   }
   if (resolution === 'approved') rows.push({ actor: 'Investor', text: 'Investor approved the verified proposal (simulated, no real trade)' })
   if (resolution === 'declined') rows.push({ actor: 'Investor', text: 'Investor declined. Nothing executed' })
-  if (resolution === 'notified') rows.push({ actor: 'INTENT', text: 'Investor notified of the blocked action' })
-  if (resolution === 'escalated') rows.push({ actor: 'INTENT', text: 'Advisor review packet created' })
+  if (resolution === 'notified') rows.push({ actor: 'Clario', text: 'Investor notified of the blocked action' })
+  if (resolution === 'escalated') rows.push({ actor: 'Clario', text: 'Advisor review packet created' })
 
   let prev = '00000000'
   const chained = rows.map((r, k) => {

@@ -5,7 +5,7 @@ import type { Decision } from '../engine/guard'
 
 const DUTIES = [
   ['AI Agent', 'Yes', 'Reasoning, research, proposals, revisions', 'Final authorization, hard policy enforcement'],
-  ['Intent Parser', 'Optional', 'Turns natural language into structured intent', 'Overriding hard constraints'],
+  ['Intent reader (rules)', 'Code, no AI', 'Turns the request into structured intent; the investor confirms or corrects it', 'Guessing what the investor meant'],
   ['Financial Twin', 'Mostly no', 'Simulation and quantitative comparison', 'Investment recommendations'],
   ['Policy / Risk Engine', 'No', 'Hard constraints and risk checks', 'Creative recommendations'],
   ['AgentGuard', 'No (deterministic)', 'The final verification decision', 'Inventing replacement investments'],
@@ -16,7 +16,7 @@ const COMPARE = [
   ['AI advisor', 'What should I invest in?', 'The AI is still the main decision-maker'],
   ['Fraud detector', 'Is this transaction suspicious?', 'Doesn’t know this investor’s goals'],
   ['AI self-checker', 'Does the AI think its answer is OK?', 'The AI is still judging itself'],
-  ['INTENT', 'Is this action faithful to the investor’s intent, constraints and long-term goal?', 'Independent verification and authorization'],
+  ['Clario', 'Is this action faithful to the investor’s intent, constraints and long-term goal?', 'Independent verification and authorization'],
 ]
 
 const PRINCIPLES = [
@@ -62,7 +62,7 @@ export function HowItWorks() {
           AI can make the decision. <span className="text-emerald-400">It should never be the judge of its own decision.</span>
         </h1>
         <p className="mt-4 max-w-3xl text-slate-300">
-          INTENT is an independent trust layer for autonomous investing. It checks every AI-generated financial action against the investor’s intent, hard constraints, risk profile
+          Clario is an independent trust layer for autonomous investing. It checks every AI-generated financial action against the investor’s intent, hard constraints, risk profile
           and modeled long-term outcome before anything can go ahead.
         </p>
       </section>
@@ -81,7 +81,7 @@ export function HowItWorks() {
           <ArrowRight className="mx-auto hidden text-slate-300 md:block" />
           <div className="rounded-2xl bg-slate-900 p-4 text-white ring-4 ring-emerald-400/30">
             <div className="flex items-center gap-2 font-extrabold tracking-wide">
-              <ShieldCheck className="text-emerald-400" /> INTENT
+              <ShieldCheck className="text-emerald-400" /> Clario
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
               {['Intent lock', 'Policy / risk engine', 'Financial Twin', 'AgentGuard'].map((c) => (
@@ -106,18 +106,18 @@ export function HowItWorks() {
           </div>
         </div>
         <p className="mt-4 text-sm text-slate-600">
-          Most AI-investing ideas ship the agent and its safety check as one product, so the AI ends up grading its own homework. INTENT is <b>only</b> the verification layer.
+          Most AI-investing ideas ship the agent and its safety check as one product, so the AI ends up grading its own homework. Clario is <b>only</b> the verification layer.
           Any agent can plug into it, and the investor’s protection doesn’t depend on which agent they use.
         </p>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card className="p-6">
-          <SectionTitle>Agent → INTENT (request)</SectionTitle>
+          <SectionTitle>Agent → Clario (request)</SectionTitle>
           <Json value={REQUEST} />
         </Card>
         <Card className="p-6">
-          <SectionTitle>INTENT → Agent (response)</SectionTitle>
+          <SectionTitle>Clario → Agent (response)</SectionTitle>
           <Json value={RESPONSE} />
         </Card>
       </div>
@@ -148,14 +148,14 @@ export function HowItWorks() {
         </div>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Card className="p-6">
-          <SectionTitle>How INTENT differs</SectionTitle>
+          <SectionTitle>How Clario differs</SectionTitle>
           <div className="space-y-2">
             {COMPARE.map(([a, q, d]) => (
-              <div key={a} className={`rounded-xl border p-3 text-sm ${a === 'INTENT' ? 'border-emerald-300 bg-emerald-50' : 'border-slate-200'}`}>
+              <div key={a} className={`rounded-xl border p-3 text-sm ${a === 'Clario' ? 'border-emerald-300 bg-emerald-50' : 'border-slate-200'}`}>
                 <div className="flex items-center gap-2 font-semibold">
-                  {a === 'INTENT' ? <CircleCheck size={16} className="text-emerald-600" /> : <CircleX size={16} className="text-slate-400" />}
+                  {a === 'Clario' ? <CircleCheck size={16} className="text-emerald-600" /> : <CircleX size={16} className="text-slate-400" />}
                   {a}
                 </div>
                 <div className="mt-1 text-slate-600">“{q}”</div>
@@ -180,7 +180,7 @@ export function HowItWorks() {
             ))}
           </div>
           <SectionTitle>
-            <span className="mt-5 block">What INTENT is not</span>
+            <span className="mt-5 block">What Clario is not</span>
           </SectionTitle>
           <div className="flex flex-wrap gap-2">
             {NOT.map((n) => (

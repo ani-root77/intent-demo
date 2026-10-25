@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CircleCheck, CircleX, TriangleAlert } from 'lucide-react'
+import { CircleCheck, CircleMinus, CircleX, TriangleAlert } from 'lucide-react'
 import type { CheckStatus, Decision } from '../engine/guard'
 
 export const DECISION: Record<Decision, { label: string; hex: string; soft: string; text: string; border: string; blurb: string; next: string }> = {
@@ -13,11 +13,13 @@ export const STATUS_TEXT: Record<CheckStatus, string> = {
   pass: 'text-emerald-700',
   warn: 'text-amber-600',
   fail: 'text-rose-600',
+  off: 'text-slate-400',
 }
 
 export function StatusIcon({ s, size = 18 }: { s: CheckStatus; size?: number }) {
   if (s === 'pass') return <CircleCheck size={size} className="text-emerald-600 shrink-0" />
   if (s === 'warn') return <TriangleAlert size={size} className="text-amber-500 shrink-0" />
+  if (s === 'off') return <CircleMinus size={size} className="text-slate-300 shrink-0" />
   return <CircleX size={size} className="text-rose-600 shrink-0" />
 }
 

@@ -1,0 +1,30 @@
+// DEV set for reading the advisor's answer: used while building and tuning the readers.
+import type { AnswerCase } from './types'
+
+export const ANSWERS_DEV: AnswerCase[] = [
+  { text: 'I recommend selling $10,000 of BND and buying $10,000 of SMH to increase your AI exposure.', stances: { BND: 'sell', SMH: 'buy' } },
+  { text: "Putting 40% of your portfolio into Bitcoin is too risky for a moderate investor. I wouldn't do it.", stances: { IBIT: 'avoid' } },
+  { text: 'Instead of chasing NVDA, buy QQQ for broader tech exposure.', stances: { NVDA: 'avoid', QQQ: 'buy' } },
+  { text: 'Move $45,000 of cash into NVDA now. This is a chance you cannot miss.', stances: { CASH: ['sell', 'mention'], NVDA: 'buy' } },
+  { text: 'Apple reported strong earnings last quarter. Its shares rose 5%.', stances: { AAPL: 'mention' } },
+  { text: "Don't sell your VTI; it is the core of your plan.", stances: { VTI: 'mention' } },
+  { text: 'Tesla looks expensive. I would avoid adding to it right now.', stances: { TSLA: 'avoid' } },
+  { text: 'You should trim META by $5,000 and add to BND.', stances: { META: 'sell', BND: 'buy' } },
+  { text: 'I suggest investing in Palantir and SoFi for growth.', stances: {}, unknownBuys: ['Palantir', 'SoFi'] },
+  { text: "Gold is not a bad idea here; let's add $4,000 of GLD.", stances: { GLD: 'buy' } },
+  { text: 'Buying more AMD would push your tech share above your limit, so I advise against it.', stances: { AMD: 'avoid' } },
+  { text: 'Swap your QQQ for VOO to reduce concentration.', stances: { QQQ: 'sell', VOO: 'buy' } },
+  { text: 'Microsoft has been a steady performer. I think adding some is reasonable: buy $3,000 of MSFT.', stances: { MSFT: 'buy' } },
+  { text: 'No trades are needed. Your mix of VTI, VXUS and BND fits your goal.', stances: { VTI: 'mention', VXUS: 'mention', BND: 'mention' } },
+  { text: 'Crypto is extremely volatile. I would pass on IBIT.', stances: { IBIT: 'avoid' } },
+  { text: 'If you are comfortable with more risk, you could consider SMH, but I would not recommend it given your goals.', stances: { SMH: 'avoid' } },
+  { text: 'Use $6,000 from BND to purchase AAPL.', stances: { BND: 'sell', AAPL: 'buy' } },
+  { text: 'Keep your bonds. Selling them now makes no sense.', stances: { BND: 'mention' } },
+  { text: 'Amazon? I would steer clear for now.', stances: { AMZN: 'avoid' } },
+  { text: 'There is no doubt NVDA is a great company; buy $2,000 more.', stances: { NVDA: 'buy' } },
+  { text: 'Reallocate $8,000 from TLT into VTI.', stances: { TLT: 'sell', VTI: 'buy' } },
+  { text: "Google has fallen 10%. I don't think now is the time to buy more of it.", stances: { GOOGL: 'avoid' } },
+  { text: 'Rotate out of TSLA and into VOO.', stances: { TSLA: 'sell', VOO: 'buy' } },
+  { text: 'I recommend against META. Consider JNJ instead.', stances: { META: 'avoid', JNJ: 'buy' } },
+  { text: 'Never put more than 5% into a single stock like AMD.', stances: { AMD: ['avoid', 'mention'] } },
+]

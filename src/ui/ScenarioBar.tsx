@@ -7,13 +7,13 @@ export function caption(s: Step, flow: Flow): string {
     case 'intent':
       return flow.scenario.intent.kind === 'request' ? 'Investor states her intent' : 'Investor sets a standing mandate'
     case 'parse':
-      return 'INTENT locks the intent as hard constraints'
+      return 'Clario locks the intent as hard constraints'
     case 'context':
       return 'Untrusted content reaches the agent'
     case 'propose':
       return s.i === 0 ? 'AI agent proposes an action' : `AI agent revises its proposal (v${s.i + 1})`
     case 'verify':
-      return `INTENT independently verifies v${s.i + 1}: ${DECISION[flow.verifications[s.i].decision].label}`
+      return `Clario independently verifies v${s.i + 1}: ${DECISION[flow.verifications[s.i].decision].label}`
     case 'feedback':
       return 'Structured feedback loops back to the agent'
     case 'outcome':

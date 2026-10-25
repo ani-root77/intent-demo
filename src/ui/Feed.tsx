@@ -51,16 +51,16 @@ function StepCard({ step, latest, flow, investor, policy, agent, resolution, onR
           <div className="inline-block rounded-2xl rounded-tl-sm bg-slate-900 px-4 py-2.5 text-lg font-medium text-white">“{sc.intent.text}”</div>
           <p className="mt-2 text-xs text-slate-500">
             {sc.intent.kind === 'request'
-              ? 'The request goes to her AI agent. The same intent is locked inside INTENT as the reference every proposal is checked against.'
-              : 'The agent runs the portfolio on its own under this mandate. INTENT keeps the mandate as the reference.'}
+              ? 'The request goes to her AI agent. The same intent is locked inside Clario as the reference every proposal is checked against.'
+              : 'The agent runs the portfolio on its own under this mandate. Clario keeps the mandate as the reference.'}
           </p>
         </Shell>
       )
     case 'parse':
       return (
-        <Shell latest={latest} who="INTENT · Intent lock" title="The intent becomes structured constraints and is locked" icon={<Lock size={18} />} tone="bg-teal-600">
+        <Shell latest={latest} who="Clario · Intent lock" title="The intent becomes structured constraints and is locked" icon={<Lock size={18} />} tone="bg-teal-600">
           <p className="mb-2 text-sm text-slate-600">
-            Maya said a few words. INTENT merges them with her profile, so proposals are checked against her <b>whole plan</b> and not only the literal request.
+            Maya said a few words. Clario merges them with her profile, so proposals are checked against her <b>whole plan</b> and not only the literal request.
           </p>
           <Json value={structuredIntent(sc, investor, policy)} />
           <p className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
@@ -86,9 +86,9 @@ function StepCard({ step, latest, flow, investor, policy, agent, resolution, onR
       return <VerifyCard v={flow.verifications[step.i]} latest={latest} />
     case 'feedback':
       return (
-        <Shell latest={latest} who="INTENT → AI Agent" title="Structured feedback, not a new investment" icon={<CornerDownLeft size={18} />} tone="bg-amber-500">
+        <Shell latest={latest} who="Clario → AI Agent" title="Structured feedback, not a new investment" icon={<CornerDownLeft size={18} />} tone="bg-amber-500">
           <p className="mb-2 text-sm text-slate-600">
-            INTENT says what failed and which limits a new proposal has to meet. <b>It does not pick the investment.</b> The agent has to come up with the revision itself.
+            Clario says what failed and which limits a new proposal has to meet. <b>It does not pick the investment.</b> The agent has to come up with the revision itself.
           </p>
           <Json value={flow.feedback[step.i]} />
         </Shell>
@@ -124,7 +124,7 @@ function ProposalCard({ v, agent, latest }: { v: Verification; agent: string; la
     <Shell latest={latest} who={`AI Agent · ${agent} · mocked`} title={<>Proposal v{p.attempt}: {p.summary}</>} icon={<Bot size={18} />} tone="bg-indigo-600">
       {p.attempt > 1 && (
         <div className="mb-2 inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
-          <CornerDownLeft size={12} /> Revised by the agent after INTENT feedback
+          <CornerDownLeft size={12} /> Revised by the agent after Clario feedback
         </div>
       )}
       <p className="text-sm text-slate-600">{p.rationale}</p>
@@ -141,7 +141,7 @@ function ProposalCard({ v, agent, latest }: { v: Verification; agent: string; la
         ))}
       </div>
       <details className="mt-2 text-xs">
-        <summary className="cursor-pointer text-slate-500 hover:text-slate-800">Payload sent to INTENT · POST /v1/verify</summary>
+        <summary className="cursor-pointer text-slate-500 hover:text-slate-800">Payload sent to Clario · POST /v1/verify</summary>
         <Json
           className="mt-2"
           value={{
@@ -164,7 +164,7 @@ function VerifyCard({ v, latest }: { v: Verification; latest: boolean }) {
   return (
     <Shell
       latest={latest}
-      who="INTENT · Policy engine + Financial Twin + AgentGuard"
+      who="Clario · Policy engine + Financial Twin + AgentGuard"
       title={
         <span className="flex flex-wrap items-center gap-2">
           Independent verification of v{v.proposal.attempt}
@@ -285,7 +285,7 @@ function AllowCard({ flow, investor, latest, resolution, onResolve }: OutcomePro
       </div>
       {rejected && (
         <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-          <b>What INTENT stopped:</b> the first proposal ({rejected.proposal.summary}) would have moved her goal likelihood to{' '}
+          <b>What Clario stopped:</b> the first proposal ({rejected.proposal.summary}) would have moved her goal likelihood to{' '}
           <b>{pct(rejected.twinAfter.successPct, 0)}</b> and her bad-case outcome to <b>{usdShort(last(rejected.twinAfter.p10))}</b> (today: {usdShort(last(b.p10))}). Tech exposure would have hit{' '}
           <b>{pct((techExposure(rejected.after) / total(rejected.after)) * 100)}</b>.
         </div>
@@ -302,7 +302,7 @@ function AllowCard({ flow, investor, latest, resolution, onResolve }: OutcomePro
           <button onClick={() => onResolve('declined')} className="rounded-xl border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50">
             Decline
           </button>
-          <span className="text-xs text-slate-400">Passing INTENT doesn’t execute anything. Maya approves.</span>
+          <span className="text-xs text-slate-400">Passing Clario doesn’t execute anything. Maya approves.</span>
         </div>
       )}
     </Shell>
@@ -315,7 +315,7 @@ function BlockCard({ flow, investor, latest, resolution, onResolve }: OutcomePro
   const traded = v.proposal.trades.reduce((s, t) => s + Math.max(0, t.amount), 0)
   const fromContext = failed.some((c) => c.id === 'context')
   return (
-    <Shell latest={latest} who="INTENT · AgentGuard" title="Blocked. Nothing was executed." icon={<Ban size={18} />} tone="bg-rose-600">
+    <Shell latest={latest} who="Clario · AgentGuard" title="Blocked. Nothing was executed." icon={<Ban size={18} />} tone="bg-rose-600">
       <div className="grid grid-cols-3 gap-2">
         <Kpi label="Goal likelihood if executed" before={pct(v.twinBefore.successPct, 0)} after={pct(v.twinAfter.successPct, 0)} good={false} />
         <Kpi label={`Bad case at ${investor.retireAge}`} before={usdShort(last(v.twinBefore.p10))} after={usdShort(last(v.twinAfter.p10))} good={false} />
@@ -334,11 +334,11 @@ function BlockCard({ flow, investor, latest, resolution, onResolve }: OutcomePro
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Message to Maya</div>
         <p className="mt-1 text-sm text-slate-700">
           “Your agent proposed: <b>{v.proposal.summary}</b>.{fromContext ? ' It was reacting to an unverified “urgent” alert, not to anything you asked for.' : ''} That
-          doesn’t fit your moderate-risk plan or your retirement goal, so INTENT blocked it. Your portfolio is unchanged.”
+          doesn’t fit your moderate-risk plan or your retirement goal, so Clario blocked it. Your portfolio is unchanged.”
         </p>
       </div>
       <p className="mt-2 text-xs text-slate-500">
-        INTENT doesn’t claim to catch every manipulation. It blocked this because the action breaks Maya’s policy and goal, whatever the cause.
+        Clario doesn’t claim to catch every manipulation. It blocked this because the action breaks Maya’s policy and goal, whatever the cause.
       </p>
       {resolution === 'notified' ? (
         <Done>Maya notified. Incident logged to the audit trail.</Done>
@@ -354,7 +354,7 @@ function BlockCard({ flow, investor, latest, resolution, onResolve }: OutcomePro
 function EscalateCard({ flow, latest, resolution, onResolve }: OutcomeProps) {
   const v = flow.verifications[flow.verifications.length - 1]
   return (
-    <Shell latest={latest} who="INTENT · AgentGuard" title="Escalated to a human. Never approved automatically." icon={<Siren size={18} />} tone="bg-violet-600">
+    <Shell latest={latest} who="Clario · AgentGuard" title="Escalated to a human. Never approved automatically." icon={<Siren size={18} />} tone="bg-violet-600">
       <div className="overflow-hidden rounded-xl border border-slate-200">
         {flow.verifications.map((x) => (
           <div key={x.proposal.id} className="flex items-center gap-3 border-b border-slate-100 px-3 py-2 text-sm last:border-0">

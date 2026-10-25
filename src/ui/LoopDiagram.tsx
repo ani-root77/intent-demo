@@ -89,7 +89,7 @@ export function LoopDiagram({ flow, index, agent }: { flow: Flow; index: number;
 
   return (
     <div ref={ref} className="relative w-full select-none" style={{ height: H }}>
-      {/* The INTENT layer band */}
+      {/* The Clario layer band */}
       <div
         className="absolute rounded-2xl border border-dashed border-emerald-400/70 bg-emerald-400/5"
         style={{ left: x[2] - nw / 2 - 18, width: nw + 36, top: 44, height: H - 64 }}
@@ -172,7 +172,7 @@ export function LoopDiagram({ flow, index, agent }: { flow: Flow; index: number;
           <span className="grid h-7 w-7 place-items-center rounded-lg bg-emerald-500 text-slate-950">
             <ShieldCheck size={16} />
           </span>
-          <span className="font-extrabold tracking-wide">INTENT</span>
+          <span className="font-extrabold tracking-wide">Clario</span>
           {step.kind === 'verify' && <span className="ml-auto h-2 w-2 animate-ping rounded-full bg-emerald-400" />}
         </div>
         <div className="mt-2 flex flex-wrap gap-1">
